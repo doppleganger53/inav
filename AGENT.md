@@ -5,6 +5,7 @@
 **INAV** is a navigation-capable flight controller firmware for multirotor, fixed-wing, and other RC vehicles. It is a community-driven project written primarily in C (C99/C11 standard) with support for STM32 F4, F7, H7, and AT32 microcontrollers.
 
 ### Key Characteristics
+
 - **Type**: Embedded firmware for flight controllers
 - **Language**: C (C99/C11), with some C++ for unit tests
 - **Build System**: CMake (version 3.13+)
