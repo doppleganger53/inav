@@ -556,7 +556,7 @@ static void gpsDecodeProtocolVersion(const char *proto, size_t bufferLength)
     }
 }
 
-static uint32_t gpsDecodeHardwareVersion(const char * szBuf, unsigned nBufSize)
+static uint8_t gpsDecodeHardwareVersion(const char * szBuf, unsigned nBufSize)
 {
     // ublox_5   hwVersion 00040005
     if (strncmp(szBuf, "00040005", nBufSize) == 0) {
@@ -635,7 +635,7 @@ static bool gpsParseFrameUBLOX(void)
             gpsSolDRV.time.hours = _buffer.timeutc.hour;
             gpsSolDRV.time.minutes = _buffer.timeutc.min;
             gpsSolDRV.time.seconds = _buffer.timeutc.sec;
-            gpsSolDRV.time.millis = _buffer.timeutc.nano / (1000*1000);
+            gpsSolDRV.time.millis = (uint16_t)(MAX(0, _buffer.timeutc.nano) / (1000*1000));
 
             gpsSolDRV.flags.validTime = true;
         } else {
@@ -674,7 +674,7 @@ static bool gpsParseFrameUBLOX(void)
             gpsSolDRV.time.hours = _buffer.pvt.hour;
             gpsSolDRV.time.minutes = _buffer.pvt.min;
             gpsSolDRV.time.seconds = _buffer.pvt.sec;
-            gpsSolDRV.time.millis = _buffer.pvt.nano / (1000*1000);
+            gpsSolDRV.time.millis = (uint16_t)(MAX(0, _buffer.pvt.nano) / (1000*1000));
 
             gpsSolDRV.flags.validTime = true;
         } else {

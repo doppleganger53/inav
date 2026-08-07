@@ -175,6 +175,7 @@ void onNewGPSData(void)
     static int32_t previousLon;
     static int32_t previousAlt;
     static bool isFirstGPSUpdate = true;
+    static bool originAltitudeCorrectionIsActive = true;
 
     gpsLocation_t newLLH;
     const timeUs_t currentTimeUs = micros();
@@ -220,6 +221,15 @@ void onNewGPSData(void)
             /* If we were never armed - keep altitude at zero */
             geoSetOrigin(&posControl.gpsOrigin, &newLLH, GEO_ORIGIN_RESET_ALTITUDE);
         }
+        else if (ARMING_FLAG(ARMED) && originAltitudeCorrectionIsActive) {
+            /* Continue updating gps origin altitude after arming if gps epv exceeds max limit
+             * correcting back to takeoff altitude using estimated altitude */
+            if (posEstimator.gps.epv >= positionEstimationConfig()->max_eph_epv) {
+                posControl.gpsOrigin.alt = newLLH.alt - posEstimator.est.pos.z;
+            } else {
+                originAltitudeCorrectionIsActive = false;
+            }
+        }
 
         if (posControl.gpsOrigin.valid) {
             /* Convert LLH position to local coordinates */
@@ -232,6 +242,8 @@ void onNewGPSData(void)
 
                 /* Use VELNED provided by GPS if available, calculate from coordinates otherwise */
                 float gpsScaleLonDown = constrainf(cos_approx((ABS(gpsSol.llh.lat) / 10000000.0f) * 0.0174532925f), 0.01f, 1.0f);
+                /* SITL (X-Plane DataRef) passes zero velNED — use coordinate-difference velocity instead.
+                 * MSP HITL explicitly injects real velNED via readMspSimulatorValues, so let it through. */
                 if (!ARMING_FLAG(SIMULATOR_MODE_SITL) && gpsSol.flags.validVelNE) {
                     posEstimator.gps.vel.x = gpsSol.velNED[X];
                     posEstimator.gps.vel.y = gpsSol.velNED[Y];
