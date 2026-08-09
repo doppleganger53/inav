@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "ms-vscode-remote.remote-wsl",
+        "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools",
+        "marus25.cortex-debug",
+        "eamodio.gitlens",
+        "tamasfe.even-better-toml",
+        "alefragnani.Bookmarks"
+    ]
+}
