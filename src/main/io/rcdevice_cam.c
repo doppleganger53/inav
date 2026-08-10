@@ -348,15 +348,19 @@ void rcdeviceUpdate(timeUs_t currentTimeUs)
     rcdevice5KeySimulationProcess(currentTimeUs);
 }
 
-void rcdeviceInit(void)
+void rcdeviceControlInit(void)
 {
-    // open serial port
-    runcamDeviceInit(camDevice);
-
     for (boxId_e i = BOXCAMERA1; i <= BOXCAMERA3; i++) {
         uint8_t switchIndex = i - BOXCAMERA1;
         switchStates[switchIndex].isActivated = true;
     }
+}
+
+void rcdeviceInit(void)
+{
+    // open serial port
+    runcamDeviceInit(camDevice);
+    rcdeviceControlInit();
 }
 
 #endif

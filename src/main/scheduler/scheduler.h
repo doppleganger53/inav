@@ -106,6 +106,9 @@ typedef enum {
 #ifdef USE_RCDEVICE
     TASK_RCDEVICE,
 #endif
+#ifdef USE_THERMAL_CAMERA
+    TASK_THERMAL_CAMERA,
+#endif
 #ifdef USE_VTX_CONTROL
     TASK_VTXCTRL,
 #endif

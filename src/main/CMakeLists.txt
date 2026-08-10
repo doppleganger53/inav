@@ -392,6 +392,8 @@ main_sources(COMMON_SRC
     io/rcdevice.h
     io/rcdevice_cam.c
     io/rcdevice_cam.h
+    io/thermal_camera.c
+    io/thermal_camera.h
 
     io/osd/custom_elements.c
 

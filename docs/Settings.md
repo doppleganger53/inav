@@ -6372,6 +6372,16 @@ Which aux channel to use to change serial output & baud rate (MSP / Telemetry). 
 
 ---
 
+### thermal_camera_enabled
+
+Use JS-MINI256 thermal camera control instead of RunCam on the serial port assigned to RCDEVICE
+
+| Default | Min | Max |
+| --- | --- | --- |
+| OFF | OFF | ON |
+
+---
+
 ### thr_comp_weight
 
 Weight used for the throttle compensation based on battery voltage. See the [battery documentation](Battery.md#automatic-throttle-compensation-based-on-battery-voltage)

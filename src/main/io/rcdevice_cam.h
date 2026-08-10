@@ -39,6 +39,7 @@ extern runcamDevice_t *camDevice;
 extern bool rcdeviceInMenu;
 
 void rcdeviceInit(void);
+void rcdeviceControlInit(void);
 void rcdeviceUpdate(timeUs_t currentTimeUs);
 
 bool rcdeviceIsEnabled(void);

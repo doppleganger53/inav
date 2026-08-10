@@ -67,6 +67,7 @@
 #include "io/rcdevice_cam.h"
 #include "io/osd_joystick.h"
 #include "io/smartport_master.h"
+#include "io/thermal_camera.h"
 #include "io/vtx.h"
 #include "io/vtx_msp.h"
 #include "io/osd_dji_hd.h"
@@ -421,10 +422,14 @@ void fcTasksInit(void)
 #endif
 #ifdef USE_RCDEVICE
 #ifdef USE_LED_STRIP
-    setTaskEnabled(TASK_RCDEVICE, rcdeviceIsEnabled() || osdJoystickEnabled());
+    bool rcdeviceTaskEnabled = rcdeviceIsEnabled() || osdJoystickEnabled();
 #else
-    setTaskEnabled(TASK_RCDEVICE, rcdeviceIsEnabled());
+    bool rcdeviceTaskEnabled = rcdeviceIsEnabled();
 #endif
+    setTaskEnabled(TASK_RCDEVICE, rcdeviceTaskEnabled);
+#endif
+#ifdef USE_THERMAL_CAMERA
+    setTaskEnabled(TASK_THERMAL_CAMERA, thermalCameraIsEnabled());
 #endif
 #ifdef USE_PROGRAMMING_FRAMEWORK
     setTaskEnabled(TASK_PROGRAMMING_FRAMEWORK, true);
@@ -682,6 +687,15 @@ cfTask_t cfTasks[TASK_COUNT] = {
         .taskFunc = rcdeviceUpdate,
         .desiredPeriod = TASK_PERIOD_HZ(10),        // 10 Hz, 100ms
         .staticPriority = TASK_PRIORITY_MEDIUM,
+    },
+#endif
+
+#ifdef USE_THERMAL_CAMERA
+    [TASK_THERMAL_CAMERA] = {
+        .taskName = "THERMAL CAM",
+        .taskFunc = thermalCameraUpdate,
+        .desiredPeriod = TASK_PERIOD_HZ(20),
+        .staticPriority = TASK_PRIORITY_IDLE,
     },
 #endif
 

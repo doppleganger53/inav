@@ -120,6 +120,7 @@
 #include "io/serial.h"
 #include "io/displayport_msp.h"
 #include "io/smartport_master.h"
+#include "io/thermal_camera.h"
 #include "io/vtx.h"
 #include "io/vtx_control.h"
 #include "io/vtx_smartaudio.h"
@@ -689,9 +690,16 @@ void init(void)
     if (feature(FEATURE_VBAT | FEATURE_CURRENT_METER))
         batteryInit();
 
-#ifdef USE_RCDEVICE
+#if defined(USE_RCDEVICE) && defined(USE_THERMAL_CAMERA)
+    if (thermalCameraIsConfigured()) {
+        thermalCameraInit();
+        rcdeviceControlInit();
+    } else {
+        rcdeviceInit();
+    }
+#elif defined(USE_RCDEVICE)
     rcdeviceInit();
-#endif // USE_RCDEVICE
+#endif
 
 #ifdef USE_DSHOT
     initDShotCommands();

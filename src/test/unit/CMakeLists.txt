@@ -30,6 +30,10 @@ set_property(SOURCE sensor_gyro_unittest.cc PROPERTY depends
 set_property(SOURCE telemetry_hott_unittest.cc PROPERTY depends
     "telemetry/hott.c" "common/gps_conversion.c" "common/string_light.c")
 
+set_property(SOURCE thermal_camera_unittest.cc PROPERTY definitions
+    USE_THERMAL_CAMERA USE_RCDEVICE USE_PROGRAMMING_FRAMEWORK THERMAL_CAMERA_UNIT_TEST)
+set_property(SOURCE thermal_camera_unittest.cc PROPERTY depends "io/thermal_camera.c")
+
 set_property(SOURCE time_unittest.cc PROPERTY depends "drivers/time.c")
 
 set_property(SOURCE circular_queue_unittest.cc PROPERTY depends "common/circular_queue.c")
