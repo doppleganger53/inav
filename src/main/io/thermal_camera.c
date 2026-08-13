@@ -60,6 +60,8 @@
 #define THERMAL_CAMERA_CLASS_SETTINGS 0x74
 #define THERMAL_CAMERA_SUBCOMMAND_SAVE_SETTINGS 0x10
 
+#define THERMAL_CAMERA_FULL_PALETTE_MAX 0x0E
+
 #define THERMAL_CAMERA_GVAR_PALETTE 0
 #define THERMAL_CAMERA_GVAR_FFC 1
 
@@ -77,9 +79,20 @@ void thermalCameraBuildPacket(uint8_t commandClass, uint8_t subcommand, uint8_t 
     packet[8] = THERMAL_CAMERA_TRAILER;
 }
 
-uint8_t thermalCameraPaletteCode(int32_t logicalPalette)
+uint8_t thermalCameraPaletteCode(int32_t logicalPalette, bool fullPalette)
 {
     static const uint8_t paletteCodes[] = { 0x00, 0x01, 0x05, 0x02 };
+
+    if (fullPalette) {
+        if (logicalPalette < 0) {
+            return 0;
+        }
+        if (logicalPalette > THERMAL_CAMERA_FULL_PALETTE_MAX) {
+            return THERMAL_CAMERA_FULL_PALETTE_MAX;
+        }
+
+        return (uint8_t)logicalPalette;
+    }
 
     if (logicalPalette < 0) {
         logicalPalette = 0;
@@ -92,10 +105,11 @@ uint8_t thermalCameraPaletteCode(int32_t logicalPalette)
 
 #ifndef THERMAL_CAMERA_UNIT_TEST
 
-PG_REGISTER_WITH_RESET_TEMPLATE(thermalCameraConfig_t, thermalCameraConfig, PG_RCDEVICE_CONFIG, 1);
+PG_REGISTER_WITH_RESET_TEMPLATE(thermalCameraConfig_t, thermalCameraConfig, PG_RCDEVICE_CONFIG, 2);
 
 PG_RESET_TEMPLATE(thermalCameraConfig_t, thermalCameraConfig,
     .enabled = false,
+    .fullPalette = false,
 );
 
 static serialPort_t *thermalCameraPort;
@@ -118,7 +132,7 @@ static bool thermalCameraSendCommand(uint8_t commandClass, uint8_t subcommand, u
 bool thermalCameraSetPalette(int32_t logicalPalette)
 {
     return thermalCameraSendCommand(THERMAL_CAMERA_CLASS_PALETTE, THERMAL_CAMERA_SUBCOMMAND_PALETTE,
-        thermalCameraPaletteCode(logicalPalette));
+        thermalCameraPaletteCode(logicalPalette, thermalCameraConfig()->fullPalette));
 }
 
 bool thermalCameraTriggerFfc(void)

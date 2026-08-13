@@ -6382,6 +6382,16 @@ Use JS-MINI256 thermal camera control instead of RunCam on the serial port assig
 
 ---
 
+### thermal_camera_full_palette
+
+Expose all 15 JS-MINI256 palettes through GVAR 0 instead of the four-palette selection
+
+| Default | Min | Max |
+| --- | --- | --- |
+| OFF | OFF | ON |
+
+---
+
 ### thr_comp_weight
 
 Weight used for the throttle compensation based on battery voltage. See the [battery documentation](Battery.md#automatic-throttle-compensation-based-on-battery-voltage)

@@ -59,10 +59,16 @@ TEST(ThermalCameraTest, BuildsConfirmedPackets)
 
 TEST(ThermalCameraTest, MapsAndClampsLogicalPalettes)
 {
-    EXPECT_EQ(0x00, thermalCameraPaletteCode(0));
-    EXPECT_EQ(0x01, thermalCameraPaletteCode(1));
-    EXPECT_EQ(0x05, thermalCameraPaletteCode(2));
-    EXPECT_EQ(0x02, thermalCameraPaletteCode(3));
-    EXPECT_EQ(0x00, thermalCameraPaletteCode(-1));
-    EXPECT_EQ(0x02, thermalCameraPaletteCode(4));
+    EXPECT_EQ(0x00, thermalCameraPaletteCode(0, false));
+    EXPECT_EQ(0x01, thermalCameraPaletteCode(1, false));
+    EXPECT_EQ(0x05, thermalCameraPaletteCode(2, false));
+    EXPECT_EQ(0x02, thermalCameraPaletteCode(3, false));
+    EXPECT_EQ(0x00, thermalCameraPaletteCode(-1, false));
+    EXPECT_EQ(0x02, thermalCameraPaletteCode(4, false));
+
+    for (int32_t palette = 0; palette <= 14; palette++) {
+        EXPECT_EQ(palette, thermalCameraPaletteCode(palette, true));
+    }
+    EXPECT_EQ(0x00, thermalCameraPaletteCode(-1, true));
+    EXPECT_EQ(0x0E, thermalCameraPaletteCode(15, true));
 }

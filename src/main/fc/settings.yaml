@@ -4327,6 +4327,11 @@ groups:
         default_value: OFF
         field: enabled
         type: bool
+      - name: thermal_camera_full_palette
+        description: "Expose all 15 JS-MINI256 palettes through GVAR 0 instead of the four-palette selection"
+        default_value: OFF
+        field: fullPalette
+        type: bool
 
   - name: PG_FW_AUTOLAND_CONFIG
     type: navFwAutolandConfig_t

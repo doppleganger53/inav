@@ -34,13 +34,14 @@
 
 typedef struct thermalCameraConfig_s {
     bool enabled;
+    bool fullPalette;
 } thermalCameraConfig_t;
 
 PG_DECLARE(thermalCameraConfig_t, thermalCameraConfig);
 
 void thermalCameraBuildPacket(uint8_t commandClass, uint8_t subcommand, uint8_t readWrite, uint8_t value,
     uint8_t packet[THERMAL_CAMERA_PACKET_SIZE]);
-uint8_t thermalCameraPaletteCode(int32_t logicalPalette);
+uint8_t thermalCameraPaletteCode(int32_t logicalPalette, bool fullPalette);
 
 bool thermalCameraIsConfigured(void);
 bool thermalCameraIsEnabled(void);
