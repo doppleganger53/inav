@@ -32,6 +32,15 @@
 
 #define THERMAL_CAMERA_PACKET_SIZE 9
 
+typedef enum {
+    THERMAL_CAMERA_IMAGE_BRIGHTNESS,
+    THERMAL_CAMERA_IMAGE_CONTRAST,
+    THERMAL_CAMERA_IMAGE_ENHANCEMENT,
+    THERMAL_CAMERA_IMAGE_STATIC_DENOISE,
+    THERMAL_CAMERA_IMAGE_DYNAMIC_DENOISE,
+    THERMAL_CAMERA_IMAGE_SETTING_COUNT,
+} thermalCameraImageSetting_e;
+
 typedef struct thermalCameraConfig_s {
     bool enabled;
     bool fullPalette;
@@ -42,6 +51,8 @@ PG_DECLARE(thermalCameraConfig_t, thermalCameraConfig);
 void thermalCameraBuildPacket(uint8_t commandClass, uint8_t subcommand, uint8_t readWrite, uint8_t value,
     uint8_t packet[THERMAL_CAMERA_PACKET_SIZE]);
 uint8_t thermalCameraPaletteCode(int32_t logicalPalette, bool fullPalette);
+uint8_t thermalCameraPresetIndex(int32_t logicalPreset);
+uint8_t thermalCameraPresetValue(int32_t logicalPreset, thermalCameraImageSetting_e setting);
 
 bool thermalCameraIsConfigured(void);
 bool thermalCameraIsEnabled(void);
@@ -52,3 +63,7 @@ bool thermalCameraSetPalette(int32_t logicalPalette);
 bool thermalCameraTriggerFfc(void);
 bool thermalCameraTriggerBackgroundCorrection(void);
 bool thermalCameraSaveSettings(void);
+
+#ifdef THERMAL_CAMERA_UNIT_TEST
+void thermalCameraTestInit(bool fullPalette);
+#endif
